@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4 text-center">Find a Service Provider</h1>
+
+    <form method="POST" class="row g-3 justify-content-center">
+        {% csrf_token %}
+        <div class="col-md-4">
+            <input type="text" name="service_type" class="form-control" placeholder="Service Type" required>
+        </div>
+        <div class="col-md-4">
+            <input type="text" name="location" class="form-control" placeholder="Location" required>
+        </div>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary w-100">Search</button>
+        </div>
+    </form>
+
+    {% if providers %}
+        <h3 class="mt-5">Results:</h3>
+        <ul class="list-group mt-3">
+            {% for p in providers %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <span>
+                        <strong>{{ p.name }}</strong> — {{ p.service_type }} in {{ p.location }}
+                    </span>
+                    <span>
+                        <a href="{% url 'book_provider' p.id %}" class="btn btn-success btn-sm">Book Now</a>
+                        <a href="{% url 'provider_reviews' p.id %}" class="btn btn-outline-primary btn-sm ms-2">See Reviews</a>
+                    </span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% elif providers is not none %}
+        <p class="text-danger mt-4 text-center">No matching providers found.</p>
+    {% endif %}
+</div>
+{% endblock %}

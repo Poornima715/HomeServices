@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4">My Bookings</h2>
+
+    {% if bookings %}
+        <table class="table table-hover table-bordered align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>#</th>
+                    <th>Provider</th>
+                    <th>Service</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Status</th>
+                    <th>Review</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for booking in bookings %}
+                <tr>
+                    <td>{{ forloop.counter }}</td>
+                    <td>{{ booking.provider.name }}</td>
+                    <td>{{ booking.service.name }}</td>
+                    <td>{{ booking.booking_date }}</td>
+                    <td>{{ booking.booking_time }}</td>
+                    <td>
+                        <span class="badge 
+                            {% if booking.status == 'Completed' %}
+                                bg-success
+                            {% elif booking.status == 'Pending' %}
+                                bg-warning text-dark
+                            {% else %}
+                                bg-secondary
+                            {% endif %}
+                        ">
+                            {{ booking.status }}
+                        </span>
+                    </td>
+                    <td>
+                        {% if booking.status == "Completed" %}
+                            <a href="{% url 'leave_review' booking.id %}" class="btn btn-sm btn-outline-primary">Review</a>
+                        {% else %}
+                            <span class="text-muted">—</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="alert alert-info">You haven’t made any bookings yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

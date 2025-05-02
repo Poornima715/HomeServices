@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Book Service{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Book {{ provider.name }} ({{ provider.service_type }})</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Your Name</label>
+        <input type="text" name="name" value="{{ provider.name }}" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" name="email" value="{{ provider.email }}" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Phone</label>
+        <input type="text" name="phone" value="{{ provider.phone }}" class="form-control" required>
+      </div>
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Address</label>
+        <input type="text" name="address" value="" class="form-control" required>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label class="form-label">Select Service</label>
+        <select name="service" class="form-select" required>
+          {% for service in services %}
+            <option value="{{ service.id }}">{{ service.name }} - ₹{{ service.price }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="col-md-3 mb-3">
+        <label class="form-label">Booking Date</label>
+        <input type="date" name="booking_date" class="form-control" required>
+      </div>
+      <div class="col-md-3 mb-3">
+        <label class="form-label">Booking Time</label>
+        <input type="time" name="booking_time" class="form-control" required>
+      </div>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Confirm Booking</button>
+    <a href="{% url 'home' %}" class="btn btn-outline-secondary ms-2">Cancel</a>
+  </form>
+</div>
+{% endblock %}
