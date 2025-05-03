@@ -1,19 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse, HttpResponseRedirect
 from django.views.decorators.csrf import csrf_exempt
 from django.db.models import Avg, Prefetch
-from django.core.management import call_command
 
 from .models import ServiceProvider, Service, Booking, User, Review
-
-
-def run_migrate(request):
-    try:
-        call_command('makemigrations')
-        call_command('migrate')
-        return HttpResponse("✅ Migrations ran successfully.")
-    except Exception as e:
-        return HttpResponse(f"❌ Migration failed: {str(e)}", status=500)
 
 
 def home(request):
@@ -152,7 +141,7 @@ def leave_review(request, booking_id):
             comment=comment
         )
 
-        # Update average rating of provider
+        # Update provider's average rating
         provider = booking.provider
         avg_rating = Review.objects.filter(booking__provider=provider).aggregate(Avg('rating'))['rating__avg']
         provider.rating = round(avg_rating or 0, 1)
