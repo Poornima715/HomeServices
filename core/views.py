@@ -4,6 +4,17 @@ from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseRedirect
 from .models import Review
 from django.db.models import Avg
+from django.core.management import call_command
+from django.http import HttpResponse
+
+def run_migrate(request):
+    try:
+        call_command('makemigrations')
+        call_command('migrate')
+        return HttpResponse("Migrations ran successfully.")
+    except Exception as e:
+        return HttpResponse(f"Migration failed: {str(e)}")
+
 
 def leave_review(request, booking_id):
     booking = get_object_or_404(Booking, id=booking_id)
