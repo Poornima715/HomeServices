@@ -9,6 +9,19 @@ https://docs.djangoproject.com/en/5.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.2/ref/settings/
 """
+import os
+import dj_database_url
+from pathlib import Path
+
+# At the end of the file:
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+
+# Add this for Heroku-like static file handling
+if os.getenv('RENDER'):
+    MIDDLEWARE.append('whitenoise.middleware.WhiteNoiseMiddleware')
+    STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
 import dj_database_url
 from pathlib import Path
 
@@ -50,7 +63,7 @@ SECRET_KEY = 'django-insecure-#vs@=z#t&kd$om$ll^bn*dl@a=d4=id*61n*0vk0n@3t(t15=!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['.onrender.com']
 
 
 # Application definition
